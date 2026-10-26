@@ -2,7 +2,6 @@
 local Game = require('utils.game')
 local Color = require('utils.color_presets')
 local Server = require('utils.server')
-local Utils = require('utils.utils')
 
 -- localized functions
 local random = math.random
@@ -16,14 +15,6 @@ local warning_prefix = '## NOTE ## - '
 
 -- local vars
 local Public = {}
-
--- Preserve the core API while keeping shared helpers in utils.utils.
-Public.distance = Utils.distance
-Public.get_actor = Utils.get_actor
-Public.cast_bool = Utils.cast_bool
-Public.find_entities_by_last_user = Utils.find_entities_by_last_user
-Public.ternary = Utils.ternary
-Public.format_time = Utils.format_time
 
 --- Takes msg and prints it to all players except provided player
 -- @param msg <string|table> table if locale is used
@@ -97,7 +88,7 @@ function Public.cant_run(name)
 end
 
 --- Logs the use of a command and its user
--- @param actor string with the actor's name (usually acquired by calling get_actor)
+-- @param actor string with the actor's name (usually acquired by calling utils.utils.get_actor)
 -- @param command the command's name as table element
 -- @param parameters the command's parameters as a table (optional)
 function Public.log_command(actor, command, parameters)
