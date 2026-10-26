@@ -1,5 +1,5 @@
 local Global = require('utils.global')
-local Session = require('utils.datastore.session_data')
+local SessionData = require('utils.datastore.session_data')
 local Game = require('utils.game')
 local Token = require('utils.token')
 local Task = require('utils.task')
@@ -55,7 +55,7 @@ local clear_gui = Token.register(function(data)
 end)
 
 local validate_playtime = function(player)
-    local tracker = Session.get_session_table()
+    local tracker = SessionData.get_session_table()
 
     local playtime = player.online_time
 
@@ -67,7 +67,7 @@ local validate_playtime = function(player)
 end
 
 local validate_trusted = function(player)
-    local trusted = Session.get_trusted_table()
+    local trusted = SessionData.get_trusted_table()
 
     local is_trusted = false
 
