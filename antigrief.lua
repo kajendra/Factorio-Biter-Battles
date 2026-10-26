@@ -3,12 +3,12 @@
 --as an admin, write either /trust or /untrust and the players name in the chat to grant/revoke immunity from protection
 
 local Event = require('utils.event')
-local session = require('utils.datastore.session_data')
+local SessionData = require('utils.datastore.session_data')
 local Global = require('utils.global')
 local Core = require('utils.core')
 local Color = require('utils.color_presets')
 local Server = require('utils.server')
-local Jail = require('utils.datastore.jail_data')
+local JailData = require('utils.datastore.jail_data')
 local pool = require('maps.biter_battles_v2.pool')
 local Functions = require('maps.biter_battles_v2.functions')
 
@@ -178,7 +178,7 @@ local function do_action(player, prefix, msg, ban_msg, kill)
     elseif this.players_warned[player.index] == 1 then
         this.players_warned[player.index] = 2
         if this.enable_jail then
-            Jail.try_ul_data(player, true, 'script')
+            JailData.try_ul_data(player, true, 'script')
         elseif this.enable_autokick then
             game.kick_player(player, msg)
         end
@@ -198,7 +198,7 @@ local function get_not_trusted_warning(player)
     if not player or not player.online_time then
         return generic_part, color
     end
-    local tracker = session.get_session_table()
+    local tracker = SessionData.get_session_table()
     local playtime = player.online_time
     if tracker[player.name] then
         playtime = player.online_time + tracker[player.name]
@@ -211,8 +211,8 @@ local function on_marked_for_deconstruction(event)
     if not this.enabled then
         return
     end
-    local tracker = session.get_session_table()
-    local trusted = session.get_trusted_table()
+    local tracker = SessionData.get_session_table()
+    local trusted = SessionData.get_trusted_table()
     if not event.player_index then
         return
     end
@@ -241,8 +241,8 @@ local function on_player_ammo_inventory_changed(event)
     if not this.enabled then
         return
     end
-    local tracker = session.get_session_table()
-    local trusted = session.get_trusted_table()
+    local tracker = SessionData.get_session_table()
+    local trusted = SessionData.get_trusted_table()
     local player = game.get_player(event.player_index)
     if is_admin(player) then
         return
@@ -268,7 +268,7 @@ end
 
 local function on_player_joined_game(event)
     local player = game.get_player(event.player_index)
-    local trusted = session.get_trusted_table()
+    local trusted = SessionData.get_trusted_table()
     if not this.enabled then
         if not trusted[player.name] then
             trusted[player.name] = true
@@ -320,8 +320,8 @@ local function on_built_entity(event)
         return
     end
 
-    local tracker = session.get_session_table()
-    local trusted = session.get_trusted_table()
+    local tracker = SessionData.get_session_table()
+    local trusted = SessionData.get_trusted_table()
     if event.entity.type == 'entity-ghost' then
         local player = game.get_player(event.player_index)
         if not player then
@@ -419,7 +419,7 @@ end
 ---@param player LuaPlayer
 ---@param entity LuaEntity
 local function alert_if_not_trusted(player, entity)
-    local trusted = session.get_trusted_table()
+    local trusted = SessionData.get_trusted_table()
     if trusted[player.name] then
         return
     end
@@ -575,8 +575,8 @@ local function on_player_cursor_stack_changed(event)
     if not this.enabled then
         return
     end
-    local tracker = session.get_session_table()
-    local trusted = session.get_trusted_table()
+    local tracker = SessionData.get_session_table()
+    local trusted = SessionData.get_trusted_table()
     local player = game.get_player(event.player_index)
     if is_admin(player) then
         return
